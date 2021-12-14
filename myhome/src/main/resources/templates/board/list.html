@@ -41,14 +41,20 @@
 		<th>dadsa</th>
 		<th>dadsa</th>
 		</tr>
-		<tr>
-		<td>11111</td>
-		<td>11112</td>
-		<td>11113</td>
-		<td>11114</td>
-		</tr>
+	<tr th:each="boardlist:${boardList}">
+    <td><span th:text="${boardlist.bno}"></span></td>
+    <td><span th:text="${boardlist.title}"></span></td>
+    <td><span th:text="${boardlist.content}"></span></td>
+    <td><span th:text="${boardlist.regdate}"></span></td>
+  </tr>
 		</table>
   </div>
+    <div>건수 : <span th:text="${#lists.size(boardList)}"></span></div>
+    <form th:action="@{/board/form}"  method="post">
+    <input type="text" name="title" class="form-control">
+    <input type="text" name="content" class="form-control">
+    <button type="submit" class="btn btn-primary">전송</button>
+    </form>
 </main>
 
 
