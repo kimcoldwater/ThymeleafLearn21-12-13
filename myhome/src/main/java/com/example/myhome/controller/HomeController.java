@@ -52,4 +52,9 @@ public class HomeController {
 	public String loginView() {
 		return "/board/login";
 	}
+	
+	@PostMapping("/login")
+	public String login() {
+		return "/board/list";
+	}
 }

@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
@@ -27,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-				.antMatchers("/", "/home").permitAll()
+				.antMatchers("/board/*", "/home","/register").permitAll()
 				.anyRequest().authenticated()
 				.and()
 			.formLogin()
@@ -46,9 +48,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	      .usersByUsernameQuery("select mno,id,pw,enabled "
 	        + "from member "
 	        + "where id = ?")
-	      .authoritiesByUsernameQuery("select a.mno, a.name "
-	        + "from role a outer join member b on a.mno = b.mno "
-	        + "where a.mno = ?");
+	      .authoritiesByUsernameQuery("select c.rno, b.mno "
+	        + "from member_role a inner join member b on a.mno = b.mno "
+	        + "inner join role c on a.rno = c.rno "
+	        + "where b.id = ?");
 	}
 	
 	
@@ -57,12 +60,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public UserDetailsService userDetailsService() {
 		UserDetails user =
 			 User.withDefaultPasswordEncoder()
-				.username("user")
+				.username("id")
 				.password("password")
-				.roles("USER")
+				.roles("member")
 				.build();
 
 		return new InMemoryUserDetailsManager(user);
 	}
+	
+	@Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 }
 	
