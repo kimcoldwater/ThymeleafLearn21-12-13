@@ -29,7 +29,7 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/board/list", method=RequestMethod.GET)
-	public String list(Model model,@PageableDefault(size=4) Pageable pageable) throws Exception{
+	public String list(Model model,@PageableDefault(size=2) Pageable pageable) throws Exception{
 		Page<Board> boardList = boardRepository.findAll(pageable);
 		int startPage = Math.max(1, boardList.getPageable().getPageNumber()-4);
 		int endPage = Math.min(boardList.getTotalPages(), boardList.getPageable().getPageNumber() + 4);
